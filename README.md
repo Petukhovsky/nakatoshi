@@ -4,41 +4,15 @@
 
 A [Bitcoin Vanity Address](https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04.asciidoc#vanity-addresses) generator.
 
-nakatoshi accepts as input a prefix string (Or a file with multiple prefixes) to search for and produce
+nakatoshi accepts as input a regex string (Or a file with multiple regexes) to search for and produce
 a Bitcoin address and private / public keys. The amount of time required to find a given pattern depends
 on how long the string is, the speed of your computer, and whether you get lucky.
-
-## Install
-
-### MacOS
-
-```
-$ brew tap ndelvalle/utilities
-$ brew install nakatoshi
-```
-
-### Cargo
-
-```
-$ cargo install nakatoshi
-```
-
-### Manually
-
-Download the latest [released binary](https://github.com/ndelvalle/nakatoshi/releases)
-and add executable permissions:
-
-```bash
-# Linux example:
-$ wget -O nakatoshi "https://github.com/ndelvalle/nakatoshi/releases/download/v0.2.4/nakatoshi-linux-amd64"
-$ chmod +x nakatoshi
-```
 
 ## CLI
 
 ```
 USAGE:
-    nakatoshi [FLAGS] [OPTIONS] <prefix> --input-file <input-file>
+    nakatoshi [FLAGS] [OPTIONS] <regex> --input-file <input-file>
 
 FLAGS:
     -b, --bech32            Use Bech32 addresses. Starting with bc1q (Lowercase address)
@@ -48,12 +22,12 @@ FLAGS:
     -V, --version           Prints version information
 
 OPTIONS:
-    -i, --input-file <input-file>    File with prefixes to match addresses with
+    -i, --input-file <input-file>    File with regexes to match addresses with
     -t, --threads <threads>          Number of threads to be used [default: The number of CPUs available on the current
                                      system]
 
 ARGS:
-    <prefix>    Prefix used to match addresses
+    <regex>    Regex used to match addresses
 ```
 
 
@@ -62,18 +36,18 @@ ARGS:
 #### Generate a vanity address
 
 ```shell
-nakatoshi 1Kids
+nakatoshi ".*egor$"
 ```
 
 #### Generate a vanity address and parse JSON response
 
 ```shell
-nakatoshi 1Bitc | jq
+nakatoshi ".*egor$" | jq
 ```
 
-#### Use a file with multiple prefixes
+#### Use a file with multiple regexes
 
-A file with one address prefix on each newline can be used to search for a vanity
+A file with one address regex on each newline can be used to search for a vanity
 address. This reduces the time to find a result.
 
 Example:
