@@ -3,6 +3,7 @@ use bitcoin::secp256k1;
 use bitcoin::secp256k1::{Secp256k1, SecretKey, Signing};
 use bitcoin::util::address::Address;
 use bitcoin::util::key::{PrivateKey, PublicKey};
+use regex::Regex;
 
 pub struct BitcoinAddress {
     pub private_key: PrivateKey,
@@ -38,20 +39,19 @@ impl BitcoinAddress {
         }
     }
 
-    pub fn starts_with(&self, prefix: &str, is_case_sensitive: bool) -> bool {
+    pub fn matches_with(&self, regex_str: &str, is_case_sensitive: bool) -> bool {
         if is_case_sensitive {
-            self.address.to_string().starts_with(prefix)
+            let regex = Regex::new(regex_str).unwrap();
+            regex.is_match(self.address.to_string().as_str())
         } else {
-            self.address
-                .to_string()
-                .to_lowercase()
-                .starts_with(prefix.to_lowercase().as_str())
+            let regex = Regex::new(regex_str.to_lowercase().as_str()).unwrap();
+            regex.is_match(self.address.to_string().to_lowercase().as_str())
         }
     }
 
-    pub fn starts_with_any(&self, prefixes: &[String], is_case_sensitive: bool) -> bool {
-        for prefix in prefixes {
-            if self.starts_with(prefix, is_case_sensitive) {
+    pub fn matches_with_any(&self, regexes: &[String], is_case_sensitive: bool) -> bool {
+        for regex in regexes {
+            if self.matches_with(&regex, is_case_sensitive) {
                 return true;
             }
         }

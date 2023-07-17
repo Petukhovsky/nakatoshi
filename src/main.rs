@@ -24,11 +24,11 @@ fn main() {
         .and_then(|num_threads| num_threads.parse().ok())
         .unwrap_or_else(num_cpus::get);
 
-    let prefixes = match matches.get_one::<String>("prefix") {
-        Some(prefix) => vec![prefix.to_owned()],
+    let regexes = match matches.get_one::<String>("regex") {
+        Some(regex) => vec![regex.to_owned()],
         None => {
             let file_name = matches.get_one::<String>("input-file").unwrap();
-            get_prefixes_from_file(file_name)
+            get_regexes_from_file(file_name)
         }
     };
 
@@ -48,7 +48,7 @@ fn main() {
         rayon::iter::repeat(BitcoinAddress::new)
             .inspect(|_| progress.inc(1))
             .map(|create| create(&secp, is_compressed, is_bech32))
-            .find_any(|address| address.starts_with_any(&prefixes, is_case_sensitive))
+            .find_any(|address| address.matches_with_any(&regexes, is_case_sensitive))
             .expect("Failed to find Bitcoin address match")
     });
 
@@ -65,17 +65,17 @@ fn main() {
     print!("{}", result);
 }
 
-fn get_prefixes_from_file(file_name: &str) -> Vec<String> {
+fn get_regexes_from_file(file_name: &str) -> Vec<String> {
     let file = fs::File::open(file_name).unwrap();
     let buffer = BufReader::new(file);
 
-    let mut prefixes = buffer
+    let mut regexes = buffer
         .lines()
         .map(|line| line.expect("Failed to read Bitcoin address pattern from input file"))
         .collect::<Vec<String>>();
 
-    prefixes.sort_by_key(|a| a.len());
-    prefixes
+    regexes.sort_by_key(|a| a.len());
+    regexes
 }
 
 #[cfg(test)]

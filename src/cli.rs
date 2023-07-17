@@ -3,17 +3,17 @@ pub fn prompt() -> clap::Command {
         .version(env!("CARGO_PKG_VERSION"))
         .about(env!("CARGO_PKG_DESCRIPTION"))
         .arg(
-            clap::Arg::new("prefix")
+            clap::Arg::new("regex")
                 .index(1)
                 .required_unless_present_any(["input-file"])
-                .help("Prefix used to match addresses"),
+                .help("Regex used to match addresses"),
         )
         .arg(
             clap::Arg::new("input-file")
                 .short('i')
                 .long("input-file")
-                .required_unless_present_any(["prefix"])
-                .help("File with prefixes to match addresses with"),
+                .required_unless_present_any(["regex"])
+                .help("File with regexes to match addresses with"),
         )
         .arg(
             clap::Arg::new("threads")
