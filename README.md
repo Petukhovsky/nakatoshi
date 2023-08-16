@@ -8,6 +8,11 @@ nakatoshi accepts as input a regex string (Or a file with multiple regexes) to s
 a Bitcoin address and private / public keys. The amount of time required to find a given pattern depends
 on how long the string is, the speed of your computer, and whether you get lucky.
 
+## Requirements 
+
+Rust (https://www.rust-lang.org/)
+Build Tools for Visual Studio 2019. During installation select the C++ tools.
+
 ## CLI
 
 ```
@@ -61,7 +66,6 @@ The contents of the `input.txt` file looks like this:
 1Kids
 1Love
 ```
-
 #### Bech32 addresses
 
 ```shell
