@@ -10,8 +10,8 @@ on how long the string is, the speed of your computer, and whether you get lucky
 
 ## Requirements 
 
-Rust (https://www.rust-lang.org/)
-Build Tools for Visual Studio 2019. During installation select the C++ tools.
+* Rust (https://www.rust-lang.org/)
+* Build Tools for Visual Studio 2019. During installation select the C++ tools.
 
 ## CLI
 
